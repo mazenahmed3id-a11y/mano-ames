@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MANO GAMES</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Tahoma,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#0f172a,#1e293b);
+color:white;
+text-align:center;
+min-height:100vh;
+}
+
+header{
+padding:40px 20px;
+}
+
+.logo{
+width:320px;
+max-width:90%;
+border-radius:20px;
+box-shadow:0 0 30px rgba(255,255,255,.3);
+}
+
+h1{
+margin-top:20px;
+font-size:50px;
+color:#fff;
+text-shadow:
+0 0 10px #ff9800,
+0 0 20px #ff9800,
+0 0 40px #ff9800;
+}
+
+p{
+margin-top:10px;
+color:#cbd5e1;
+font-size:18px;
+}
+
+.social{
+margin-top:30px;
+}
+
+.social a{
+display:inline-block;
+margin:10px;
+padding:14px 28px;
+text-decoration:none;
+color:white;
+border-radius:15px;
+font-size:18px;
+font-weight:bold;
+transition:.3s;
+}
+
+.social a:hover{
+transform:scale(1.1);
+}
+
+.tiktok{
+background:#000;
+}
+
+.facebook{
+background:#1877f2;
+}
+
+.instagram{
+background:#e1306c;
+}
+
+.game-box{
+margin:40px auto;
+width:340px;
+padding:20px;
+background:#1e293b;
+border-radius:20px;
+box-shadow:0 0 20px rgba(255,255,255,.1);
+}
+
+.board{
+display:grid;
+grid-template-columns:repeat(3,100px);
+gap:5px;
+justify-content:center;
+margin-top:20px;
+}
+
+.cell{
+width:100px;
+height:100px;
+background:#334155;
+border-radius:10px;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:50px;
+cursor:pointer;
+transition:.3s;
+}
+
+.cell:hover{
+background:#475569;
+transform:scale(1.05);
+}
+
+button{
+margin-top:20px;
+padding:12px 30px;
+border:none;
+border-radius:10px;
+background:#ff9800;
+color:white;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+transform:scale(1.1);
+}
+
+#status{
+margin-top:15px;
+font-size:24px;
+}
+
+#score{
+margin-top:15px;
+font-size:22px;
+color:#facc15;
+}
+
+footer{
+margin-top:50px;
+padding:20px;
+color:#94a3b8;
+}
+</style>
+
+</head>
+<body>
+
+<header>
+
+<img src="logo.jpg" class="logo" alt="MANO GAMES">
+
+<h1>MANO GAMES</h1>
+
+<p>أهلاً بكم في موقع مانو أحمد للألعاب</p>
+
+<div class="social">
+
+<a class="tiktok"
+href="https://www.tiktok.com/@___mano___ahmed___?_r=1&_t=ZS-9770QJkkJgD"
+target="_blank">TikTok</a>
+
+<a class="facebook"
+href="https://www.facebook.com/share/18hAu7nG1J/"
+target="_blank">Facebook</a>
+
+<a class="instagram"
+href="https://www.instagram.com/manoahmed1_1?igsh=MTdnbnV5MjVqdDJ3cA=="
+target="_blank">Instagram</a>
+
+</div>
+
+</header>
+
+<div class="game-box">
+
+<h2>🎮 لعبة XO</h2>
+
+<div id="score">X : 0 | O : 0</div>
+
+<div id="status"></div>
+
+<div class="board">
+<div class="cell"></div>
+<div class="cell"></div>
+<div class="cell"></div>
+
+<div class="cell"></div>
+<div class="cell"></div>
+<div class="cell"></div>
+
+<div class="cell"></div>
+<div class="cell"></div>
+<div class="cell"></div>
+</div>
+
+<button onclick="restartGame()">
+إعادة اللعب
+</button>
+
+</div>
+
+<footer>
+© 2025 MANO GAMES
+</footer>
+
+<script>
+
+let currentPlayer = "X";
+let gameActive = true;
+
+let scores = {
+X:0,
+O:0
+};
+
+const cells = document.querySelectorAll(".cell");
+const statusText = document.getElementById("status");
+const scoreText = document.getElementById("score");
+
+const winPatterns = [
+[0,1,2],
+[3,4,5],
+[6,7,8],
+[0,3,6],
+[1,4,7],
+[2,5,8],
+[0,4,8],
+[2,4,6]
+];
+
+cells.forEach(cell => {
+
+cell.addEventListener("click", () => {
+
+if(cell.textContent !== "" || !gameActive)
+return;
+
+cell.textContent = currentPlayer;
+
+checkWinner();
+
+if(gameActive){
+currentPlayer =
+currentPlayer === "X" ? "O" : "X";
+}
+
+});
+
+});
+
+function checkWinner(){
+
+for(let pattern of winPatterns){
+
+let a = cells[pattern[0]].textContent;
+let b = cells[pattern[1]].textContent;
+let c = cells[pattern[2]].textContent;
+
+if(a && a === b && b === c){
+
+statusText.innerHTML =
+"🏆 اللاعب " + a + " فاز";
+
+scores[a]++;
+
+scoreText.innerHTML =
+"X : " + scores.X +
+" | O : " + scores.O;
+
+gameActive = false;
+
+return;
+}
+
+}
+
+let draw = true;
+
+cells.forEach(cell => {
+if(cell.textContent === ""){
+draw = false;
+}
+});
+
+if(draw){
+statusText.innerHTML = "🤝 تعادل";
+gameActive = false;
+}
+
+}
+
+function restartGame(){
+
+cells.forEach(cell => {
+cell.textContent = "";
+});
+
+statusText.innerHTML = "";
+
+currentPlayer = "X";
+gameActive = true;
+
+}
+
+</script>
+
+</body>
+</html>
